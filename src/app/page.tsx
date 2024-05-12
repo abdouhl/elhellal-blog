@@ -1,11 +1,117 @@
 'use client'
 
 
-import Link from "next/link";
 import { usePathname } from 'next/navigation'
-import { Box, Card, Inset, Text, Strong, Flex, AspectRatio,Separator } from '@radix-ui/themes';
+import { Box, Card, Inset, Text, Strong, Flex, AspectRatio,Separator, Badge } from '@radix-ui/themes';
 
 import { Header } from './components/header';
+import { useInfiniteQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { useRef, useEffect } from "react"
+
+
+const queryClient = new QueryClient();
+
+const fetchData = async (page:any) => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6&_page=' + page)
+  return await response.json();
+}
+
+const MyComponent = ()=> {
+  const myRef = useRef(null)
+
+  const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
+    {queryKey:['query'], 
+    queryFn: async ({pageParam }) => await fetchData(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (_, pages) => pages.length + 1,
+
+    }
+  )
+
+  useEffect(()=> {
+    const observer = new IntersectionObserver( 
+      (entries) => {entries.forEach( e => fetchNextPage())
+    })
+    if (myRef.current) {
+      observer.observe(myRef.current)
+    }
+  }, [myRef])
+
+
+  return( <div className="flex flex-row flex-wrap w-full max-w-screen-lg gap-3 lg:gap-4 p-3 lg:p-4">
+  {data?.pages.map((page, i)=> (
+    page.map(
+        (p:any,i:any) => <Box className="basis-2/2 md:basis-2/5 grow" key={p.id} >
+        <Card size="2" className="h-full">
+        <Flex className="h-full">
+          <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
+          <img
+              src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
+              alt="Bold typography"
+              style={{
+                display: 'block',
+                objectFit: 'cover',
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'var(--gray-5)',
+              }}
+            />
+          </Inset>
+          <Text as="p" className="basis-2/4" >
+          {p.title}
+          </Text>
+          </Flex>
+        </Card>
+      </Box>
+      )
+  ))}
+  <span ref={myRef}></span>
+  </div>
+  )
+}
+
+
+
+{/* 
+const Page = ()=> {
+  const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
+    {queryKey:['query'], 
+    queryFn: async ({ pageParam }) => await fetchPost(pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (_, pages) => {
+      return pages.length + 1
+    },
+    initialData: {
+      pages : [posts.slice(0,2)],
+      pageParams: [1],
+    },
+    }
+  )
+  
+  return (
+    <div>
+      posts:
+      {
+        data?.pages.map((page,i) => (
+          <div key={i}>
+            {page.map((post) => (
+              <div key={post.id}>
+                kkkkkkkkkk
+              </div>
+            ))
+            
+            }
+          </div>
+        ))
+      }
+      <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+        {
+          isFetchingNextPage ? 'loding more ...' : (data?.pages.length ?? 0) < 3 ? 'load more' : 'nothing to load'
+        }
+      </button>
+    </div>
+  )
+} */}
 
 export default function Home() {
   const pathname = usePathname()
@@ -86,7 +192,7 @@ export default function Home() {
     <Box className="col-span-2 row-span-2 mb-2">
           <Card size="2" className="h-full">
             <Inset clip="padding-box" side="top" pb="current">
-            <AspectRatio ratio={16 / 8}><img
+            <AspectRatio ratio={16 / 8} className="relative" ><img
                 src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
                 alt="Bold typography"
                 style={{
@@ -96,7 +202,7 @@ export default function Home() {
                   height: '100%',
                   backgroundColor: 'var(--gray-5)',
                 }}
-              /></AspectRatio>
+              /><Badge className="absolute bottom-1 right-1" >In progress</Badge></AspectRatio>
             </Inset>
             <Text as="p" size="3">
               <Strong>Typography</Strong> is the art and technique of arranging type to
@@ -301,101 +407,9 @@ export default function Home() {
 
 <Separator className="w-full max-w-screen-lg m-3 lg:m-4" />    
 
-<div className="flex flex-row flex-wrap w-full max-w-screen-lg gap-3 lg:gap-4 p-3 lg:p-4">
-<Box className="basis-2/2 md:basis-2/5 grow" >
-          <Card size="2" className="h-full">
-          <Flex className="h-full">
-            <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
-            <img
-                src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                alt="Bold typography"
-                style={{
-                  display: 'block',
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'var(--gray-5)',
-                }}
-              />
-            </Inset>
-            <Text as="p" className="basis-2/4" >
-              <Strong>Typography</Strong> is the art and technique of arranging type to
-              make written language legible, readable and appealing when displayed.
-            </Text>
-            </Flex>
-          </Card>
-        </Box>
-        <Box className="basis-2/2 md:basis-2/5 grow" >
-          <Card size="2" className="h-full">
-          <Flex className="h-full">
-            <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
-            <img
-                src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                alt="Bold typography"
-                style={{
-                  display: 'block',
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'var(--gray-5)',
-                }}
-              />
-            </Inset>
-            <Text as="p" className="basis-2/4" >
-              <Strong>Typography</Strong> is the art and technique of arranging type to
-              make written language legible, readable and appealing when displayed.
-            </Text>
-            </Flex>
-          </Card>
-        </Box>
-        <Box className="basis-2/2 md:basis-2/5 grow" >
-          <Card size="2" className="h-full">
-          <Flex className="h-full">
-            <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
-            <img
-                src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                alt="Bold typography"
-                style={{
-                  display: 'block',
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'var(--gray-5)',
-                }}
-              />
-            </Inset>
-            <Text as="p" className="basis-2/4" >
-              <Strong>Typography</Strong> is the art and technique of arranging type to
-              make written language legible, readable and appealing when displayed.
-            </Text>
-            </Flex>
-          </Card>
-        </Box>
-        <Box className="basis-2/2 md:basis-2/5 grow" >
-          <Card size="2" className="h-full">
-          <Flex className="h-full">
-            <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
-            <img
-                src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                alt="Bold typography"
-                style={{
-                  display: 'block',
-                  objectFit: 'cover',
-                  width: '100%',
-                  height: '100%',
-                  backgroundColor: 'var(--gray-5)',
-                }}
-              />
-            </Inset>
-            <Text as="p" className="basis-2/4" >
-              <Strong>Typography</Strong> is the art and technique of arranging type to
-              make written language legible, readable and appealing when displayed.
-            </Text>
-            </Flex>
-          </Card>
-        </Box>
-</div>
-
+<QueryClientProvider client={queryClient}>
+        <MyComponent />
+    </QueryClientProvider>
 </main>
   );
 }
