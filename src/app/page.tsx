@@ -405,8 +405,46 @@ export default function Home() {
         </Box>
 </div>
 
-<Separator className="w-full max-w-screen-lg m-3 lg:m-4" />    
+<Separator className="w-full mt-3 lg:mt-4" />
+<div className="w-full bg-slate-100 ">
 
+<div className="flex justify-center flex-row flex-wrap gap-2 w-full p-3 lg:p-4 max-w-screen-lg m-auto">
+<Badge size="2" radius="large" >الفترة</Badge>
+<Badge size="3" radius="large" >الفترة</Badge>
+<Badge radius="large" >الفترة</Badge>
+<Badge radius="large" >الفترة</Badge>
+<Badge radius="large" >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >نفس, ما تونس وترك</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >نفس, ما تونس وترك</Badge>
+<Badge >الفترة</Badge>
+<Badge >نفس, ما تونس وترك</Badge>
+<Badge >الفترة</Badge>
+<Badge >نفس, ما تونس وترك</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >نفس, ما تونس وترك</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+<Badge >الفترة</Badge>
+</div>
+</div>
+<Separator className="w-full mb-3 lg:mb-4" />   
 <QueryClientProvider client={queryClient}>
         <MyComponent />
     </QueryClientProvider>
