@@ -1,14 +1,13 @@
 import { Header } from '../components/header';
 
 
-import Welcome from '../posts/spaces-vs-tabs.mdx'
+import Welcome, {title, summary, publishedAt } from '../posts/spaces-vs-tabs.mdx'
 import { AspectRatio, Heading, Badge } from '@radix-ui/themes';
 import imm from '../posts/spaces-vs-tabs.jpg'
 import Moment from 'moment'
 import 'moment/locale/ar'
 import { MDXContent } from 'mdx/types';
-import title from '../posts/spaces-vs-tabs.mdx'
-import publishedAt from '../posts/spaces-vs-tabs.mdx'
+
 
 
 
@@ -37,8 +36,8 @@ export default async function Page() {
   <Badge variant='solid' >الفترة</Badge>
   <Badge variant='solid' >نفس, ما تونس وترك</Badge>
   </div>
-  <Heading className="text-white" >{title.toString()}</Heading>
-  <p className="text-white" >{Moment(publishedAt.toString(), "YYYY-MM-DD").format('d MMM YYYY')}</p>
+  <Heading className="text-white" >{title}</Heading>
+  <p className="text-white" >{Moment(publishedAt, "YYYY-MM-DD").format('d MMM YYYY')}</p>
   </div>
   
 </AspectRatio>
