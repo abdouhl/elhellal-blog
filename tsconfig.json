@@ -17,10 +17,16 @@
         "name": "next"
       }
     ],
+    
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "types": [
+    "node",
+    "webpack-env", 
+    "mdx"
+   ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "**/*.mdx"],
   "exclude": ["node_modules"]
 }
