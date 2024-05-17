@@ -11,6 +11,7 @@ import { MDXContent } from 'mdx/types';
 import {globby} from 'globby';
 
 
+export const runtime = 'edge';
 
 export async function generateStaticParams() {
 
