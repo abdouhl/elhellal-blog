@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { Header } from '../components/header';
 
 
@@ -11,9 +13,8 @@ import { MDXContent } from 'mdx/types';
 import {globby} from 'globby';
 
 
-//export const runtime = 'edge';
 
-export async function generateStaticParams() {
+/*export async function generateStaticParams() {
 
   const posts = await globby('src/app/posts/', {
     expandDirectories: {
@@ -24,7 +25,7 @@ export async function generateStaticParams() {
   return posts.map((post) => ({
     slug: post.replace('src/app/posts/','').replace('.mdx',''),
   }))
-}
+}*/
 
 export default async function Page({ params }: { params: { slug: string } }) {
   Moment.locale('ar') 
