@@ -8,13 +8,29 @@ import Moment from 'moment'
 import 'moment/locale/ar'
 import { MDXContent } from 'mdx/types';
 
+import {globby} from 'globby';
 
 
 
+export async function generateStaticParams() {
 
-export default async function Page() {
+  const posts = await globby('src/app/posts/', {
+    expandDirectories: {
+      extensions: ['mdx']
+    }
+  });
+
+  return posts.map((post) => ({
+    slug: post.replace('src/app/posts/','').replace('.mdx',''),
+  }))
+}
+
+export default async function Page({ params }: { params: { slug: string } }) {
   Moment.locale('ar') 
 
+
+  console.log(params.slug)
+  
   
   return <main className="flex min-h-screen flex-col items-center">
   <Header isHome={true} />
