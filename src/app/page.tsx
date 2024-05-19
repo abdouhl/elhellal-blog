@@ -1,6 +1,5 @@
 'use client'
 
-
 import { usePathname } from 'next/navigation'
 import { Box, Card, Inset, Text, Strong, Flex, AspectRatio,Separator, Badge } from '@radix-ui/themes';
 
@@ -9,10 +8,15 @@ import { useInfiniteQuery, QueryClient, QueryClientProvider } from "@tanstack/re
 import { useRef, useEffect } from "react"
 
 
+
 const queryClient = new QueryClient();
 
+
+
+
+
 const fetchData = async (page:any) => {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=6&_page=' + page)
+  const response = await fetch('/api?_limit=6&_page=' + page)
   return await response.json();
 }
 
@@ -22,8 +26,8 @@ const MyComponent = ()=> {
   const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
     {queryKey:['query'], 
     queryFn: async ({pageParam }) => await fetchData(pageParam),
-    initialPageParam: 1,
-    getNextPageParam: (_, pages) => pages.length + 1,
+    initialPageParam: 0,
+    getNextPageParam: (_, pages) => pages.length*6,
 
     }
   )
@@ -41,7 +45,7 @@ const MyComponent = ()=> {
   return( <div className="flex flex-row flex-wrap w-full max-w-screen-lg gap-3 lg:gap-4 p-3 lg:p-4">
   {data?.pages.map((page, i)=> (
     page.map(
-        (p:any,i:any) => <Box className="basis-2/2 md:basis-2/5 grow" key={p.id} >
+        (p:any,i:any) => <Box className="basis-2/2 md:basis-2/5 grow" key={p.post} >
         <Card size="2" className="h-full">
         <Flex className="h-full">
           <Inset clip="padding-box" side="right" pl="current" className="basis-2/4">
@@ -58,7 +62,7 @@ const MyComponent = ()=> {
             />
           </Inset>
           <Text as="p" className="basis-2/4" >
-          {p.title}
+          {p.post}
           </Text>
           </Flex>
         </Card>
@@ -112,9 +116,36 @@ const Page = ()=> {
     </div>
   )
 } */}
+/*
+const  posts1  = async () =>  {
 
-export default function Home() {
-  const pathname = usePathname()
+  const posts0 = await globby('src/app/posts/', {
+    expandDirectories: {
+      extensions: ['mdx']
+    }
+  });
+
+  let result:{title:string,summary:string,publishedAt:string}[] = [];
+  let title:string;
+  let summary:string;
+  let publishedAt:string;
+  posts0.forEach((post) => {
+    
+    let a = require(post.replace('src/app/posts/','./posts/'))
+    console.log('------', a)
+    result.push({title:a.title , summary:a.summary , publishedAt:a.publishedAt})
+})
+  return result
+}
+*/
+
+
+export default  function Home() {
+
+  
+
+
+
   //<Header isHome={true} />
   return (
     
